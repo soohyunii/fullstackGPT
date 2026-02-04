@@ -20,7 +20,7 @@ from langchain.schema.runnable import RunnableLambda
 from langchain.prompts import ChatPromptTemplate
 from langchain.storage import LocalFileStore
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.document_loaders import UnstructuredFileLoader
+#from langchain.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.embeddings import CacheBackedEmbeddings
 from langchain.vectorstores import FAISS
@@ -28,6 +28,7 @@ from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import MessagesPlaceholder
+from langchain.document_loaders import PyPDFLoader, TextLoader
 
 if "api_key" not in st.session_state:
     st.session_state.api_key = ""
@@ -52,7 +53,12 @@ def embed_file(file):
         chunk_size=600,
         chunk_overlap=100,
     )
-    loader = UnstructuredFileLoader(file_path)
+    # loader = UnstructuredFileLoader(file_path)
+    if file_path.lower().endswith(".pdf"):
+        loader = PyPDFLoader(file_path)
+    else:
+        loader = TextLoader(file_path, encoding="utf-8")
+    
     docs = loader.load_and_split(text_splitter=splitter)
     embeddings = OpenAIEmbeddings(
         openai_api_key=st.session_state.api_key
