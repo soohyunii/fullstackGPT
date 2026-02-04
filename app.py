@@ -100,12 +100,19 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 with st.sidebar:
-    st.markdown("🔗 GitHub Repository")
-    st.markdown(
-        "[👉 View Source Code](https://github.com/your-username/your-repo)"
-    )
+    st.markdown("""
+        <small>
+        🔗 <b>GitHub Repository</b><br>
+        <a href="https://github.com/soohyunii/fullstackGPT.git" target="_blank">
+        soohyunii/fullstackGPT
+        </a>
+        </small>
+        """,
+        unsafe_allow_html=True)
+    st.markdown("<br><br>", unsafe_allow_html=True)
     api_key = st.text_input("🔑 OpenAI API", placeholder="Input Your OpenAI API Key")
     submit = st.button("submit")
+    st.markdown("<br>", unsafe_allow_html=True)
     
 
 
@@ -139,25 +146,27 @@ if not st.session_state.api_key == "":
 
         if message:
             send_message(message, "human")
-            chain = ({
-                "context":retriever | RunnableLambda(format_docs),
-                "chat_history": RunnableLambda(load_history),
-                "question": RunnablePassthrough()
-            } | prompt | llm | StrOutputParser())
-            with st.chat_message("ai"):
-                placeholder = st.empty()
+            try:
+                chain = ({
+                    "context":retriever | RunnableLambda(format_docs),
+                    "chat_history": RunnableLambda(load_history),
+                    "question": RunnablePassthrough()
+                } | prompt | llm | StrOutputParser())
+                
                 answer = ""
 
                 for chunk in chain.stream(message):
-                    answer += chunk
-                    placeholder.markdown(answer)
-
+                    answer += chunk 
+                
                 memory.save_context(
                     {"question": message},
                     {"answer": answer}
                 )
-                save_message(answer, "ai")
+                send_message(answer, "ai")
                     
+            except:
+                st.error("❌ Invalid OpenAI API key. Please check your key and try again.")
+                st.session_state["messages"] = []
 
 else:
     st.session_state["messages"] = []            
