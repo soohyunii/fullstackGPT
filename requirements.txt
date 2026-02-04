@@ -3,6 +3,6 @@ langchain==0.0.332
 openai==0.28.0
 tiktoken>=0.6.0
 faiss-cpu==1.8.0.post1
-unstructured==0.10.16
+unstructured[pdf]==0.10.16
 pypdf==3.16.2
 python-dotenv==1.0.0
