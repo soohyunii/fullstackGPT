@@ -1,0 +1,67 @@
+ 
+ ### Assignment 6
+ 이전 과제에서 구현한 RAG 파이프라인을 Streamlit으로 마이그레이션합니다.
+ 파일 업로드 및 채팅 기록을 구현합니다.
+ 사용자가 자체 OpenAI API 키를 사용하도록 허용하고, st.sidebar 내부의 st.input에서 이를 로드합니다.
+ st.sidebar를 사용하여 스트림릿 앱의 코드와 함께 깃허브 리포지토리에 링크를 넣습니다.
+
+ 코드를 공개 Github 리포지토리에 푸시합니다.
+ 단. OpenAI API 키를 Github 리포지토리에 푸시하지 않도록 주의하세요.
+ 여기에서 계정을 개설하세요: https://share.streamlit.io/
+ 다음 단계를 따르세요: https://docs.streamlit.io/streamlit-community-cloud/deploy-your-appdeploy-your-app-1
+ 앱의 구조가 아래와 같은지 확인하고 배포 양식의 Main file path 에 app.py를 작성하세요.
+ your-repo/
+ ├── .../
+ ├── app.py
+ └── requirements.txt
+ 과제 제출 링크는 반드시 streamlit.app URL 이 되도록 하세요.
+
+======================> 제출완료
+
+
+
+
+
+
+
+### Assignment 7
+ QuizGPT Turbo
+
+ 오늘의 강의: 풀스택 GPT: 9.0부터 ~ 9.9까지
+ 오늘의 과제: 위의 강의를 시청하신 후, 아래 코드 챌린지를 제출하면 됩니다.
+ 제출기간: 3일 챌린지! 월요일 오전 6시까지
+ 챌린지
+
+ (EN)
+
+ Implement QuizGPT but add the following features:
+
+ Use function calling.
+ Allow the user to customize the difficulty of the test and make the LLM generate hard or easy questions.
+ Allow the user to retake the test if not all answers are correct.
+ If all answers are correct use st.ballons.
+ Allow the user to use its own OpenAI API Key, load it from an st.input inside of st.sidebar
+ Using st.sidebar put a link to the Github repo with the code of your Streamlit app.
+ (KR)
+
+ QuizGPT를 구현하되 다음 기능을 추가합니다:
+
+ 함수 호출을 사용합니다.
+ 유저가 시험의 난이도를 커스터마이징 할 수 있도록 하고 LLM이 어려운 문제 또는 쉬운 문제를 생성하도록 합니다.
+ 만점이 아닌 경우 유저가 시험을 다시 치를 수 있도록 허용합니다.
+ 만점이면 st.ballons를 사용합니다.
+ 유저가 자체 OpenAI API 키를 사용하도록 허용하고, st.sidebar 내부의 st.input에서 로드합니다.
+ st.sidebar를 사용하여 Streamlit app의 코드와 함께 Github 리포지토리에 링크를 넣습니다.
+ 제출방법
+
+ 이전 과제와 동일한 방식으로 앱을 Streamlit cloud 에 배포합니다.
+ 제출은 streamlit.app URL로 이루어져야 합니다.
+ 제출기간: 3일 챌린지! 월요일 오전 6시까지
+
+
+
+
+
+
+
+
