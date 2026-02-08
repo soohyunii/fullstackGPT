@@ -217,12 +217,6 @@ if submit:
         
 
 if not st.session_state.api_key == "":
-    llm = ChatOpenAI(
-        temperature=0.1,
-        model="gpt-3.5-turbo-1106",
-        streaming=True,
-        openai_api_key=st.session_state.api_key,
-    )
     
     
     @st.cache_data(show_spinner="Searching Wikipedia....")
@@ -234,11 +228,11 @@ if not st.session_state.api_key == "":
 
     @st.cache_data(show_spinner="Loading file now...")
     def split_file(file):
-        file_content = file.read()
+        file_content = file.getvalue()
         file_path = f"./.cache/files/{file.name}"
         with open(file_path, "wb") as f:
             f.write(file_content)
-        cache_dir = LocalFileStore(f"./.cache/embeddings/{file.name}")
+        
         splitter = CharacterTextSplitter(
             separator="\n",
             chunk_size=600,
@@ -255,7 +249,19 @@ if not st.session_state.api_key == "":
 
 
     @st.cache_data(show_spinner="Making Quiz......")
-    def run_quiz_chain(_docs, _mode):
+    def run_quiz_chain(_docs, _mode, _api_key):
+        llm_local = ChatOpenAI(
+            temperature=0.1,
+            model="gpt-3.5-turbo-1106",
+            streaming=False,  # cache 함수 안에서는 streaming 끄는 게 안전
+            openai_api_key=_api_key,
+        )
+        formatting_chain = formatting_prompt | llm_local
+        question_chain = {
+            "context": RunnableLambda(lambda x: format_docs(x["docs"])),
+            "mode": RunnableLambda(lambda x: x["mode"]),
+        } | questions_prompt | llm_local
+
         chain = {"context": question_chain} | formatting_chain | output_parser
         response = chain.invoke({"docs": _docs, "mode": _mode})
         return response
@@ -289,7 +295,7 @@ if not st.session_state.api_key == "":
         
         if docs:
             if st.button("✅ Generate Quiz", use_container_width=True):
-                response = run_quiz_chain(docs, mode)
+                response = run_quiz_chain(docs, mode, st.session_state.api_key)
                 
             
     if not docs:
@@ -306,13 +312,6 @@ if not st.session_state.api_key == "":
         """
     )
             
-    
-    formatting_chain = formatting_prompt | llm
-    question_chain = {
-        "context": RunnableLambda(lambda x: format_docs(x["docs"])),
-        "mode": RunnableLambda(lambda x: x["mode"]),
-    } | questions_prompt | llm
-        
 else:
     st.markdown(
         """
